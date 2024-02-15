@@ -1,3 +1,8 @@
+import { Game } from '../components/game/game';
+
 export default function HomePage() {
-  return <div>start</div>;
+  return <Game />;
 }
+
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(<HomePage />);
