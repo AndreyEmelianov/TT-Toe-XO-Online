@@ -20,6 +20,7 @@ export function Game() {
       <div className="grid pt-px pl-px grid-cols-[repeat(3,_30px)] grid-rows-[repeat(3,_30px)]">
         {cells.map((symb, index) => (
           <GameCell
+            key={index}
             symbol={symb}
             isWinner={winnerSequence?.includes(index)}
             onClick={() => handleCellClick(index)}
