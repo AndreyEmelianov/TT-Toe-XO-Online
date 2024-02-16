@@ -1,36 +1,86 @@
 import clsx from "clsx";
 
 import { Profile } from "../profile/profile";
-import { CrossIcon } from "./icons/cross-icon";
+import { GameSymbol } from "./game-symbol";
+import { GAME_SYMBOLS } from "./constants";
 
-export function GameInfo({ className }) {
+import avatarImage1 from "./images/avatar-1.png";
+import avatarImage2 from "./images/avatar-2.png";
+import avatarImage3 from "./images/avatar-3.png";
+import avatarImage4 from "./images/avatar-4.png";
+
+const players = [
+  {
+    id: 1,
+    name: "Dron",
+    rating: 900,
+    symbol: GAME_SYMBOLS.CROSS,
+    avatar: avatarImage1,
+  },
+  {
+    id: 2,
+    name: "Sano",
+    rating: 1000,
+    symbol: GAME_SYMBOLS.ZERO,
+    avatar: avatarImage4,
+  },
+  {
+    id: 3,
+    name: "Marina",
+    rating: 1400,
+    symbol: GAME_SYMBOLS.TRIANGLE,
+    avatar: avatarImage2,
+  },
+  {
+    id: 4,
+    name: "Lidia",
+    rating: 1500,
+    symbol: GAME_SYMBOLS.SQUARE,
+    avatar: avatarImage3,
+  },
+];
+
+export function GameInfo({ className, playersCount }) {
   return (
     <div
       className={clsx(
         className,
-        "bg-white rounded-2xl shadow-md px-8 py-4 flex justify-between",
+        "bg-white rounded-2xl shadow-md px-8 py-4 grid grid-cols-2 gap-3 justify-between ",
       )}
     >
-      <div className="flex gap-3 items-center">
-        <div className="relative">
-          <Profile className="w-[180px]" />
-          <div className="w-5 h-5 rounded-full bg-white shadow absolute -left-1 -top-1 flex items-center justify-center">
-            <CrossIcon />
-          </div>
-        </div>
-        <div className="w-px h-6 bg-slate-300" />
-        <div className="text-slate-900 text-lg font-semibold">01:08</div>
-      </div>
+      {players.slice(0, playersCount).map((player, index) => (
+        <PlayerInfo
+          key={player.id}
+          playerInfo={player}
+          isRight={index % 2 === 1}
+        />
+      ))}
+    </div>
+  );
+}
 
-      <div className="flex gap-3 items-center">
-        <div className="text-orange-600 text-lg font-semibold">00:12</div>
-        <div className="w-px h-6 bg-slate-300" />
-        <div className="relative">
-          <Profile className="w-[180px]" />
-          <div className="w-5 h-5 rounded-full bg-white shadow absolute -left-1 -top-1 flex items-center justify-center">
-            <CrossIcon />
-          </div>
+function PlayerInfo({ playerInfo, isRight }) {
+  return (
+    <div className="flex gap-3 items-center">
+      <div className={clsx("relative", isRight && "order-3")}>
+        <Profile
+          className="w-44"
+          name={playerInfo.name}
+          rating={playerInfo.rating}
+          avatar={playerInfo.avatar}
+        />
+        <div className="w-5 h-5 rounded-full bg-white shadow absolute -left-1 -top-1 flex items-center justify-center">
+          <GameSymbol symbol={playerInfo.symbol} />
         </div>
+      </div>
+      <div className={clsx("w-px h-6 bg-slate-300", isRight && "order-2")} />
+      <div
+        className={clsx(
+          "text-slate-900 text-lg font-semibold",
+          isRight && "order-1",
+        )}
+      >
+        01:30
       </div>
     </div>
   );
