@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import Link from "next/link";
 
 import { Profile } from "../profile/profile";
 import { CrossIcon } from "./icons/cross-icon";
