@@ -8,6 +8,7 @@ export function GameField({
   cells,
   currentMove,
   nextMove,
+  winnerSequence,
   handleCellClick,
 }) {
   return (
@@ -30,6 +31,7 @@ export function GameField({
         {cells.map((symbol, index) => (
           <GameCell
             key={index}
+            isWinner={winnerSequence?.includes(index)}
             onClick={() => {
               handleCellClick(index);
             }}
@@ -79,10 +81,13 @@ function GameFieldGrid({ children }) {
   );
 }
 
-function GameCell({ children, onClick }) {
+function GameCell({ children, onClick, isWinner }) {
   return (
     <button
-      className="border border-slate-200 -ml-px -mt-px flex items-center justify-center"
+      className={clsx(
+        "border border-slate-200 -ml-px -mt-px flex items-center justify-center",
+        isWinner && "bg-orange-500/10",
+      )}
       onClick={onClick}
     >
       {children}

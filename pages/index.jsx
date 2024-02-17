@@ -9,9 +9,9 @@ import {
 import { Header } from "../components/header";
 
 export default function HomePage() {
-  const [playersCount] = useState(4);
+  const [playersCount] = useState(2);
 
-  const { cells, currentMove, nextMove, handleCellClick } =
+  const { cells, currentMove, nextMove, winnerSequence, handleCellClick } =
     useGameState(playersCount);
 
   return (
@@ -27,8 +27,9 @@ export default function HomePage() {
         <GameField
           className="mt-6"
           cells={cells}
-          currentMove={currentMove}
           nextMove={nextMove}
+          currentMove={currentMove}
+          winnerSequence={winnerSequence}
           handleCellClick={handleCellClick}
         />
       </main>
