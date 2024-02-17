@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { Profile } from "../profile/profile";
@@ -40,7 +41,7 @@ const players = [
   },
 ];
 
-export function GameInfo({ className, playersCount }) {
+export function GameInfo({ className, playersCount, currentMove }) {
   return (
     <div
       className={clsx(
@@ -53,13 +54,41 @@ export function GameInfo({ className, playersCount }) {
           key={player.id}
           playerInfo={player}
           isRight={index % 2 === 1}
+          isTimerRunning={currentMove === player.symbol}
         />
       ))}
     </div>
   );
 }
 
-function PlayerInfo({ playerInfo, isRight }) {
+function PlayerInfo({ playerInfo, isRight, isTimerRunning }) {
+  const [timerSeconds, setTimerSeconds] = useState(30);
+
+  const minutesString = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+  const secondsString = String(timerSeconds % 60).padStart(2, "0");
+
+  const isDanger = timerSeconds <= 10;
+
+  useEffect(() => {
+    if (isTimerRunning) {
+      const timer = setInterval(() => {
+        setTimerSeconds((prevState) => Math.max(prevState - 1, 0));
+      }, 1000);
+
+      return () => {
+        clearInterval(timer);
+        setTimerSeconds(30);
+      };
+    }
+  }, [isTimerRunning]);
+
+  const getTimerColor = () => {
+    if (isTimerRunning) {
+      return isDanger ? "text-orange-600" : "text-slate-900";
+    }
+    return "text-slate-300";
+  };
+
   return (
     <div className="flex gap-3 items-center">
       <div className={clsx("relative", isRight && "order-3")}>
@@ -76,11 +105,12 @@ function PlayerInfo({ playerInfo, isRight }) {
       <div className={clsx("w-px h-6 bg-slate-300", isRight && "order-2")} />
       <div
         className={clsx(
-          "text-slate-900 text-lg font-semibold",
+          "text-lg font-semibold w-[60px]",
           isRight && "order-1",
+          getTimerColor(),
         )}
       >
-        01:30
+        {minutesString}:{secondsString}
       </div>
     </div>
   );
