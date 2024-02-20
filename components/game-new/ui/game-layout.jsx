@@ -29,29 +29,3 @@ export function GameLayout({
     </div>
   );
 }
-
-{
-  /* <GameTitle playersCount={playersCount} />
-<GameInfo
-  className="mt-4"
-  playersCount={playersCount}
-  currentMove={currentMove}
-  isWinner={!!winnerSymbol}
-  handlePlayerTimeOver={handlePlayerTimeOver}
-/>
-{!!winnerSymbol && (
-  <div className="my-4">
-    Победитель:
-    <GameSymbol symbol={winnerSymbol} />
-  </div>
-)}
-<GameField
-  className="mt-6"
-  cells={cells}
-  nextMove={nextMove}
-  currentMove={currentMove}
-  winnerSymbol={winnerSymbol}
-  winnerSequence={winnerSequence}
-  handleCellClick={handleCellClick}
-/> */
-}
