@@ -18,16 +18,29 @@ import {
 import { getNextMove } from "./model/get-next-move";
 import { computeWinner } from "./model/compute-winner";
 import { computeWinnerSymbol } from "./model/compute-winner-symbol";
+import { computePlayerTimer } from "./model/compute-player-timer";
+import { useInterval } from "../lib/timers";
 
 const PLAYERS_COUNT = 2;
 
 export function Game() {
   const [gameState, dispatchGameState] = useReducer(
     gameStateReducer,
-    { playersCount: PLAYERS_COUNT },
+    {
+      playersCount: PLAYERS_COUNT,
+      defaultTimer: 60000,
+      currentMoveStart: Date.now(),
+    },
     initGameState,
   );
   const { cells, currentMove } = gameState;
+
+  useInterval(1000, gameState.currentMoveStart, () => {
+    dispatchGameState({
+      type: GAME_STATE_ACTIONS.TICK,
+      now: Date.now(),
+    });
+  });
 
   const nextMove = getNextMove(gameState);
 
@@ -46,17 +59,24 @@ export function Game() {
         gameInfo={
           <GameInfo isRatingGame playersCount={4} timeMode={"1 мин. на ход"} />
         }
-        playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => (
-          <PlayerInfo
-            key={player.id}
-            avatar={player.avatar}
-            name={player.name}
-            rating={player.rating}
-            timerSeconds={60}
-            symbol={player.symbol}
-            isRight={index % 2 === 1}
-          />
-        ))}
+        playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => {
+          const { timer, timerStartAt } = computePlayerTimer(
+            gameState,
+            player.symbol,
+          );
+          return (
+            <PlayerInfo
+              key={player.id}
+              avatar={player.avatar}
+              name={player.name}
+              rating={player.rating}
+              symbol={player.symbol}
+              isRight={index % 2 === 1}
+              timer={timer}
+              timerStartAt={timerStartAt}
+            />
+          );
+        })}
         gameMoveInfo={
           <GameMoveInfo currentMove={currentMove} nextMove={nextMove} />
         }
@@ -70,6 +90,7 @@ export function Game() {
               dispatchGameState({
                 type: GAME_STATE_ACTIONS.CELL_CLICK,
                 index,
+                now: Date.now(),
               });
             }}
           />
@@ -83,7 +104,7 @@ export function Game() {
             avatar={player.avatar}
             name={player.name}
             rating={player.rating}
-            timerSeconds={60}
+            timer={gameState.timers[player.symbol]}
             symbol={player.symbol}
             isRight={index % 2 === 1}
           />
