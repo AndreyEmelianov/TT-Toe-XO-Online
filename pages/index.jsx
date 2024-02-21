@@ -1,5 +1,6 @@
 import { Header } from "../components/header";
 import { Game } from "../components/game-new";
+import { UiTextField } from "../components/uikit/ui-text-field";
 
 export default function HomePage() {
   return (
